@@ -1,31 +1,29 @@
 var Words = function(){};
 
-Words.prototype.count = function(input) {
-	var specialCharacters = '!!&@$%^&';
-	input = input.replace(specialCharacters, '');
-	input = input.replace(/:/g, '');
-	input = input.replace(/\s\s+/g, ' ');
-	input = input.toLowerCase();
-	var wordCount = {};
-	var words = input.split(/[ ,]/);
-	for (var i = 0; i < words.length; i++) {
-		word = words[i];
-		if (word in wordCount) {
-			wordCount[word] += 1;
-		} else {
-			wordCount[word]= 1;
-		}
-	}
-	return wordCount;
-};
+Words.prototype.count= function(input){
+    const wordCount = {};
+
+    let inputArr = input.toLowerCase().replace(/[^A-Za-z0-9" "'\u00C0-\u017F\u0430-\u044f]/g, " ").split(" ");
+
+    
+    inputArr.map(function(word){
+        if (word[0] === "'"){
+            word = word.replace("'", "");
+        }
+        if (word[word.length-1] === "'"){
+            word = word.replace("'", "");
+        }
+
+        if (wordCount[word] > 0){
+            wordCount[word]++;
+        } else if (wordCount[word] === undefined && word !== ""){
+            wordCount[word] = 1;
+        } else if (wordCount[word] !== undefined){
+            wordCount[word] = 1
+        }
+    })
+
+    return wordCount
+}
 
 module.exports = Words;
-
-
-
-  // it('counts one word', function() {
-  //   var expectedCounts = { word: 1 };
-  //   expect(words.count('word')).toEqual(expectedCounts);
-  // });
-
-// !!&@$%^&
